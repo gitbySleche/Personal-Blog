@@ -1,0 +1,14 @@
+<DOCTYPE! html>
+    <html>
+        <body>
+            <h1>New Article</h1>
+                <form action="/admin/new" method="POST">
+                    <textarea name="title" rows="1" cols="50">Article Title</textarea><br>
+                    <textarea name="date" rows="1" cols="50">Publishing Date</textarea><br>
+                    <textarea name="text" rows="20" cols="50">Content</textarea><br><br>
+                    <input type="submit" value="Publish">               
+                </form>
+                <button onclick="window.location.href='/admin'">Return</button>
+
+        </body>
+    </html>

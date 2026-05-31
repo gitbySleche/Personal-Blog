@@ -1,0 +1,30 @@
+<DOCTYPE! html>
+
+<html>
+
+	<body>
+	
+		<h1>Personal Blog</h1>
+		
+		{% for id, title in article_titles %}
+			
+			{{title}}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+			<form action="/admin/edit">
+				<input type="hidden" name="article_id" value="{{id}}"></input>
+				<button type="submit">Edit</button>
+			</form>
+
+			<form>
+				<button>Delete</button><br><br>
+			</form>
+
+		{% endfor %}
+		
+		<button onclick="window.location.href='/admin/new'">+ Add</button>
+		
+		
+		
+	
+	</body>
+
+</html>
