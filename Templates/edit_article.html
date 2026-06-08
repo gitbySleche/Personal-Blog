@@ -1,0 +1,15 @@
+<DOCTYPE! html>
+    <html>
+        <body>
+            <h1>Edit Article</h1>
+                <form action="/admin/update" method="POST">
+                    <textarea name="title" rows="1" cols="50">{{title}}</textarea><br>
+                    <textarea name="date" rows="1" cols="50">{{date}}</textarea><br>
+                    <textarea name="text" rows="20" cols="50">{{content}}</textarea><br><br>
+                    <input type="hidden" name="article_id" value="{{id}}"></input>>
+                    <button type="submit">Republish</button> {% if changes_saved %} Changes saved. {% endif %}               
+                </form>
+                <button onclick="window.location.href='/admin'">Return</button>
+
+        </body>
+    </html>

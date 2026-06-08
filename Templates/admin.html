@@ -4,27 +4,34 @@
 
 	<body>
 	
-		<h1>Personal Blog</h1>
+		<h1>Personal Blog&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <button onclick="window.location.href='/admin/new'">+ Add</button></h1>
 		
 		{% for id, title in article_titles %}
 			
 			{{title}}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-			<form action="/admin/edit">
+			<form action="/admin/edit" method="POST" style="display:inline">
 				<input type="hidden" name="article_id" value="{{id}}"></input>
 				<button type="submit">Edit</button>
 			</form>
 
-			<form>
-				<button>Delete</button><br><br>
+			<form action="/admin/delete_confirmation" method="POST" style="display:inline">
+				<input type="hidden" name="article_id" value="{{id}}"></input>
+				<button type="submit">Delete</button>
 			</form>
 
+			{% if confirmation and delete_id == id%}
+
+				Are you sure you want to delete this article?
+				<form action="/admin" method="POST" style="display:inline">
+					<input type="hidden" name="article_id" value="{{id}}"></input>
+					<button type="submit" name="confirmation" value="Yes">Yes</button>
+					<button type="submit" name="confirmation" value="No">No</button>
+				</form>
+
+			{% endif %}
+			<br><br>
 		{% endfor %}
 		
-		<button onclick="window.location.href='/admin/new'">+ Add</button>
-		
-		
-		
-	
 	</body>
 
 </html>
