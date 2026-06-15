@@ -1,0 +1,11 @@
+<DOCTYPE! html>
+    <html>
+        <body>
+            <h1>Admin log in...</h1>
+                <form action="/login" method="POST">
+                    Username: <textarea name="username" rows="1" cols="50"></textarea><br>
+                    Password: &nbsp;<textarea name="password" rows="1" cols="50"></textarea><br>
+                    <input type="submit" value="Login"> {% if error %} {{error}} {% endif %}              
+                </form>
+        </body>
+    </html>

@@ -4,9 +4,9 @@
 
 	<body>
 	
-		<h1>Personal Blog&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <button onclick="window.location.href='/admin/new'">+ Add</button></h1>
+		<h1>Personal Blog_admin&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<button onclick="window.location.href='/admin/new'">+ Add</button>&nbsp;<button onclick="window.location.href='/logout'">Log out</button></h1>
 		
-		{% for id, title in article_titles %}
+		{% for id, title, date in article_titles %}
 			
 			{{title}}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 			<form action="/admin/edit" method="POST" style="display:inline">

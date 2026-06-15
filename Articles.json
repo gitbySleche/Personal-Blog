@@ -1,3 +1,9 @@
 {
-    "Articles": {}
+    "Articles": {
+        "1": {
+            "Article Title": "Top of the morning",
+            "Date of Publishing": "June 15, 2026",
+            "Content": "what a great day"
+        }
+    }
 }

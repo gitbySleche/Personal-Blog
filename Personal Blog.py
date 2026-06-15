@@ -1,35 +1,74 @@
 import os
 import json
-from flask import Flask, render_template, request, redirect, url_for
+from flask import Flask, render_template, request, redirect, url_for, session
 
 app = Flask(__name__)
+app.secret_key = 'secret_key'
 
+def article_list():
+
+    with open('Articles.json', 'r') as file:
+        data = json.load(file)
+        
+    article_titles = []
+
+    for id in data['Articles']:
+        article_titles.append((id, data['Articles'][id]['Article Title'], data['Articles'][id]['Date of Publishing'] ))
+    
+    return article_titles
+
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+
+    if request.method == 'POST':
+        if request.form['username'] == 'admin' and request.form['password'] == 'password':
+            session['logged_in'] = True
+            return redirect(url_for('admin'))
+        else:
+            return render_template('login.html', error='Invalid credentials')
+    return render_template('login.html')
+
+@app.route('/logout')
+def logout():
+    session.pop('logged_in', None)
+    return redirect(url_for('home'))
+ 
 @app.route('/')
 def home():
+
+    if os.path.exists('Articles.json'):
+        return render_template('home.html', article_titles=article_list())
+    
     return render_template('home.html')
 
-@app.route('/article')
-def article():
+@app.route('/article/<id>')
+def article(id):
 
-    return render_template('article_template.html')
+    with open('Articles.json', 'r') as file:
+        data = json.load(file)
+
+    article_title = data['Articles'][id]['Article Title']
+    article_date = data['Articles'][id]['Date of Publishing']
+    article_content = data['Articles'][id]['Content']
+
+    return render_template('article.html', title=article_title, date=article_date, content=article_content)
 
 @app.route('/admin', methods=['GET', 'POST'])
 def admin():
 
+    if not session.get('logged_in'):
+        return redirect(url_for('login'))
+
     if request.method == 'GET' and os.path.exists('Articles.json'):
 
-        with open('Articles.json', 'r') as file:
-            data = json.load(file)
+        article_titles = article_list()
         
-        article_titles = []
-
-        for id in data['Articles']:
-            
-            article_titles.append((id, data['Articles'][id]['Article Title']))
+        if article_titles == []:
+            return render_template('admin.html') 
 
         return render_template('admin.html', article_titles=article_titles)
     
-    elif request.method == 'POST':
+    elif request.method == 'POST': #article deletion confirmation
         
         confirmation = request.form['confirmation']
         if confirmation == 'Yes':
@@ -55,6 +94,9 @@ def admin():
 @app.route('/admin/new', methods=['GET', 'POST'])
 def new():
 
+    if not session.get('logged_in'):
+        return redirect(url_for('login'))
+
     if request.method =='GET':
         return render_template('new_article.html')
     
@@ -68,7 +110,7 @@ def new():
             data = {'Articles': {}}
 
     if data['Articles'] == {}:
-        new_id = 1
+        new_id = '1'
 
     else:
         keys_list = list(data['Articles'].keys())
@@ -77,7 +119,7 @@ def new():
     title = request.form['title']
     date = request.form['date']
     text = request.form['text']
-    data['Articles'][new_id] = {'Article Title':title, 'Date of publishing':date, 'Content':text}
+    data['Articles'][new_id] = {'Article Title':title, 'Date of Publishing':date, 'Content':text}
     new_article = data['Articles'][new_id]['Article Title']
 
     with open('Articles.json', 'w') as file:
@@ -88,12 +130,15 @@ def new():
 @app.route('/admin/edit', methods=['POST'])
 def edit():
     
+    if not session.get('logged_in'):
+        return redirect(url_for('login'))
+
     with open('Articles.json', 'r') as file:
         data = json.load(file)
 
     id = request.form['article_id']
     title = data['Articles'][id]['Article Title']
-    date = data['Articles'][id]['Date of publishing']
+    date = data['Articles'][id]['Date of Publishing']
     content = data['Articles'][id]['Content']
     
     return render_template('edit_article.html', title=title, date=date, content=content, id=id)
@@ -101,6 +146,9 @@ def edit():
 @app.route('/admin/update', methods=['POST'])
 def update():
 
+    if not session.get('logged_in'):
+        return redirect(url_for('login'))
+    
     id = request.form['article_id']
     title = request.form['title']
     date = request.form['date']
@@ -110,7 +158,7 @@ def update():
         data = json.load(file)
     
     data['Articles'][id]['Article Title'] = title
-    data['Articles'][id]['Date of publishing'] = date
+    data['Articles'][id]['Date of Publishing'] = date
     data['Articles'][id]['Content'] = text
 
     with open('Articles.json', 'w') as file:
@@ -121,14 +169,11 @@ def update():
 @app.route('/admin/delete_confirmation', methods=['POST'])
 def delete_confirmation():
 
+    if not session.get('logged_in'):
+        return redirect(url_for('login'))
+    
     id = request.form['article_id']
-    
-    with open('Articles.json', 'r') as file:
-        data = json.load(file)
-    
-    article_titles = []
-    for article_id in data['Articles']:
-        article_titles.append((article_id, data['Articles'][article_id]['Article Title']))
+    article_titles = article_list()
     
     return render_template('admin.html', article_titles=article_titles, confirmation=True, delete_id=id)
 

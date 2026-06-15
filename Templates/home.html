@@ -4,13 +4,13 @@
 
 	<body>
 	
-		<h1>Personal Blog</h1>
+		<h1>Personal Blog&nbsp;&nbsp;&nbsp;&nbsp;<button onclick="window.location.href='/login'">Login</button></h1>
 		
-		Test link: <a href="http://127.0.0.1:5000/article">Article link</a>
+		{% for id, article, date in article_titles %}
 		
-		
-		
-		
+			<a href="http://127.0.0.1:5000/article/{{id}}">{{article}}</a> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; {{date}}<br>
+
+		{%endfor%}
 	
 	</body>
 
