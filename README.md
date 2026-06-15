@@ -1,6 +1,6 @@
 # Personal Blog
 
-A full stack web application built with Python and Flask that allows you to create, read, update, and delete blog articles.
+A full stack web application built with Python and Flask that allows you to create, read, update, and delete blog articles. https://roadmap.sh/projects/personal-blog
 
 ## Features
 
